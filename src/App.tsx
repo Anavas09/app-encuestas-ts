@@ -1,6 +1,7 @@
 // import { useEffect } from 'react';
 import { Container, Typography, Box, Button, Radio, RadioGroup, FormControlLabel, Checkbox, FormGroup, Rating, Paper } from '@mui/material';
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import questionsData from './questions.json';
 
 type Question = {
@@ -20,13 +21,23 @@ interface SurveyState {
   reset: () => void;
 }
 
-const useSurveyStore = create<SurveyState>((set) => ({
-  answers: {},
-  setAnswer: (id, value) => set((state) => ({ answers: { ...state.answers, [id]: value } })),
-  reset: () => set({ answers: {} }),
-}));
+const useSurveyStore = create<SurveyState>()(
+  persist(
+    (set) => ({
+      answers: {},
+      setAnswer: (id, value) => set((state) => ({ answers: { ...state.answers, [id]: value } })),
+      reset: () => set({ answers: {} }),
+    }),
+    {
+      name: 'survey-answers', // clave en localStorage
+    }
+  )
+);
 
-const questions: Question[] = questionsData;
+const questions: Question[] = questionsData.map(q => ({
+  ...q,
+  type: q.type as 'single' | 'multiple' | 'rating'
+}));
 
 function App() {
   const { answers, setAnswer, reset } = useSurveyStore();
