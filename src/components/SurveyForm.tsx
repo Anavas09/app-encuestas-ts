@@ -1,4 +1,5 @@
-import { Container, Typography, Paper } from '@mui/material';
+import { Card, CardContent } from "@/components/ui/card";
+import { Typography } from "./ui/typography";
 import SurveyActions from './SurveyActions';
 import { useSurveyStore } from '../store';
 import questionsData from '../questions.json';
@@ -37,21 +38,23 @@ export default function SurveyForm() {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 4 }}>
-      <Paper elevation={3} sx={{ p: 3 }}>
-        <Typography variant="h4" gutterBottom>Encuesta de ejemplo</Typography>
-        {questions.map((q) => (
-          <QuestionItem
-            key={q.id}
-            question={q}
-            value={answers[q.id]}
-            onSingleChange={handleSingleChange}
-            onMultipleChange={handleMultipleChange}
-            onRatingChange={handleRatingChange}
-          />
-        ))}
-        <SurveyActions onSubmit={handleSubmit} />
-      </Paper>
-    </Container>
+    <div className="flex justify-center mt-8">
+      <Card className="w-full max-w-xl">
+        <CardContent className="p-6">
+          <Typography variant="h4" className="mb-4">Encuesta de ejemplo</Typography>
+          {questions.map((q) => (
+            <QuestionItem
+              key={q.id}
+              question={q}
+              value={answers[q.id]}
+              onSingleChange={handleSingleChange}
+              onMultipleChange={handleMultipleChange}
+              onRatingChange={handleRatingChange}
+            />
+          ))}
+          <SurveyActions onSubmit={handleSubmit} />
+        </CardContent>
+      </Card>
+    </div>
   );
 }

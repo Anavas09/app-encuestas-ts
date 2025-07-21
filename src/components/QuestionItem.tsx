@@ -1,4 +1,7 @@
-import { Box, Typography, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox, Rating } from '@mui/material';
+import { Typography } from "./ui/typography";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import { cn } from "@/lib/utils";
 import type { Question } from '../store';
 
 interface Props {
@@ -11,44 +14,57 @@ interface Props {
 
 export default function QuestionItem({ question, value, onSingleChange, onMultipleChange, onRatingChange }: Props) {
   return (
-    <Box sx={{ mb: 3 }}>
-      <Typography variant="h6">{question.question}</Typography>
+    <div className="mb-6">
+      <Typography variant="h6" className="mb-2">{question.question}</Typography>
       {question.type === 'single' && (
         <RadioGroup
-          value={value || ''}
-          onChange={(e) => onSingleChange(question.id, e.target.value)}
+          value={typeof value === 'string' ? value : ''}
+          onValueChange={(val) => onSingleChange(question.id, val)}
         >
           {question.options.map((opt) => (
-            <FormControlLabel key={opt} value={opt} control={<Radio />} label={opt} />
+            <div key={opt} className="flex items-center space-x-2 mb-1">
+              <RadioGroupItem value={opt} id={`${question.id}-${opt}`} />
+              <label htmlFor={`${question.id}-${opt}`} className="text-sm font-medium">
+                {opt}
+              </label>
+            </div>
           ))}
         </RadioGroup>
       )}
       {question.type === 'multiple' && (
-        <FormGroup>
+        <div className="flex flex-col gap-2">
           {question.options.map((opt) => (
-            <FormControlLabel
-              key={opt}
-              control={
-                <Checkbox
-                  checked={Array.isArray(value) && (value as string[]).includes(opt)}
-                  onChange={() => onMultipleChange(question.id, opt)}
-                />
-              }
-              label={opt}
-            />
+            <div key={opt} className="flex items-center space-x-2">
+              <Checkbox
+                id={`${question.id}-multi-${opt}`}
+                checked={Array.isArray(value) && (value as string[]).includes(opt)}
+                onCheckedChange={() => onMultipleChange(question.id, opt)}
+              />
+              <label htmlFor={`${question.id}-multi-${opt}`} className="text-sm font-medium">
+                {opt}
+              </label>
+            </div>
           ))}
-        </FormGroup>
+        </div>
       )}
       {question.type === 'rating' && (
-        <Rating
-          name={`rating-${question.id}`}
-          value={Number(value) || 0}
-          onChange={(_, val) => onRatingChange(question.id, val)}
-          max={5}
-          icon={<span style={{ color: '#FFD700', fontSize: 32 }}>★</span>}
-          emptyIcon={<span style={{ color: '#ccc', fontSize: 32 }}>☆</span>}
-        />
+        <div className="flex items-center space-x-1 mt-2">
+          {[1,2,3,4,5].map((star) => (
+            <button
+              key={star}
+              type="button"
+              className={cn(
+                "text-3xl transition-colors",
+                Number(value) >= star ? "text-yellow-400" : "text-gray-300"
+              )}
+              onClick={() => onRatingChange(question.id, star)}
+              aria-label={`Calificar ${star}`}
+            >
+              ★
+            </button>
+          ))}
+        </div>
       )}
-    </Box>
+    </div>
   );
 }

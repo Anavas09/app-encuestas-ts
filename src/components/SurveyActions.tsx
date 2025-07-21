@@ -1,4 +1,4 @@
-import { Button, Box } from '@mui/material';
+import { Button } from "@/components/ui/button";
 
 interface SurveyActionsProps {
   onSubmit: () => void;
@@ -6,10 +6,10 @@ interface SurveyActionsProps {
 
 export default function SurveyActions({ onSubmit }: SurveyActionsProps) {
   return (
-    <Box mt={2}>
-      <Button variant="contained" color="primary" onClick={onSubmit} fullWidth>
+    <div className="mt-4">
+      <Button className="w-full" onClick={onSubmit}>
         Enviar respuestas
       </Button>
-    </Box>
+    </div>
   );
 }
