@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "type": "single",
+    "question": "¿Cuál es tu lenguaje de programación favorito?",
+    "options": ["JavaScript", "Python", "Java", "C#"]
+  },
+  {
+    "id": 2,
+    "type": "multiple",
+    "question": "¿Qué tecnologías has usado?",
+    "options": ["React", "Angular", "Vue", "Svelte"]
+  },
+  {
+    "id": 3,
+    "type": "rating",
+    "question": "¿Qué tan satisfecho estás con tu trabajo actual?",
+    "options": ["1", "2", "3", "4", "5"]
+  }
+]
